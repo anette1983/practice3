@@ -1,6 +1,6 @@
 import { Section, Container, CountryInfo, Loader } from 'components';
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
+import { useParams, Link, useLocation } from 'react-router-dom';
 import { fetchCountry } from 'service/country-service';
 
 export const Country = () => {
@@ -8,6 +8,8 @@ export const Country = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const { countryId } = useParams();
+  const location = useLocation();
+  const backLink = useRef(location?.state?.from ?? '/');
 
   useEffect(() => {
     if (!countryId) {
@@ -33,6 +35,7 @@ export const Country = () => {
       {isLoading && <Loader />}
       {error && <h2>Сталася помилка!</h2>}
       <Container>
+        <Link to={backLink.current}>Back to list</Link>
         <CountryInfo
           flag={flag}
           capital={capital}
